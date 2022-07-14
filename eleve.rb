@@ -1,41 +1,22 @@
-class Eleve
+module Notable
 
-  MAJORITE = 18
   MOYENNE = 10
 
-  attr_reader :nom, :age, :notes
-  attr_writer :age
+  attr_accessor :notes
 
-  def self.bonjour(nom)
-    puts "Salut #{nom}"
-  end
-
-  def initialize(nom, age)
-    @nom = nom
-    @age = age
-    @notes = []
-  end
-
-  def demo_public
-    demo
-  end
-
-  def bonjour
-    self.class.bonjour(@nom)
-  end
-
-  def isMajeur?
-    @age >= MAJORITE
+  def notes
+    @notes = [] if !@notes
+    return @notes
   end
 
   def ajouterNote(note)
-    @notes << note
+    notes << note
   end
 
   def moyenne
     m = 0
-    @notes.each { |note| m += note }
-    return m / @notes.length
+    notes.each { |note| m += note }
+    return m / notes.length
   end
 
   def moyenne?
@@ -43,26 +24,28 @@ class Eleve
   end
 
   def >(eleve)
-    moyenne > eleve.moyenne
+    return moyenne > eleve.moyenne
   end
 
-  private
-  def demo
-    puts 'Demo'
+end
+
+class Eleve
+
+  include Notable
+
+  attr_reader :nom
+
+  def self.bonjour(nom)
+    puts "Salut #{nom}"
   end
 
-  # def bonjour
-  #   puts "Bonjour #{@nom}, j'ai #{@age} ans"
-  #   puts 'Je suis majeur' if isMajeur?
-  # end
+  def initialize(nom)
+    @nom = nom
+  end
 
-  # def age=(age)
-  #   @age = age.to_i
-  # end
-
-  # def age
-  #   @age
-  # end
+  def bonjour
+    self.class.bonjour(@nom)
+  end
 
 end
 
@@ -82,26 +65,17 @@ class Delegue < Eleve
 
 end
 
+class Professeur
 
-eleve1 = Eleve.new('Nathan', 19)
-eleve1.ajouterNote(18)
-eleve1.ajouterNote(10)
-eleve1.ajouterNote(7)
-
-d = Delegue.new('Marc', 18)
-d.ajouterNote(18)
-d.ajouterNote(14)
-d.ajouterNote(15)
-puts d.notes.inspect
-# puts d.class.superclass
-
-
-class String
-
-  def bonjour
-    "Bonjour #{self}"
-  end
+  include Notable
 
 end
 
-# puts 'Nathan'.bonjour
+eleve = Eleve.new('Nathan')
+eleve.ajouterNote(18)
+eleve.ajouterNote(14)
+puts eleve.moyenne
+
+prof = Professeur.new
+prof.notes = [15, 19]
+puts prof.moyenne
