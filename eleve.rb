@@ -66,21 +66,34 @@ class Eleve
 
 end
 
+class Delegue < Eleve
+  
+  def partcipeConseil
+    puts 'Salut je suis au conseil' if moyenne?
+  end
+
+  def moyenne
+    super + 1
+  end
+
+  def ajouterNote(note)
+    super(note + 1)
+  end
+
+end
+
 
 eleve1 = Eleve.new('Nathan', 19)
 eleve1.ajouterNote(18)
 eleve1.ajouterNote(10)
 eleve1.ajouterNote(7)
 
-eleve2 = Eleve.new('Marc', 19)
-eleve2.ajouterNote(18)
-eleve2.ajouterNote(20)
-eleve2.ajouterNote(7)
-
-puts eleve1.moyenne
-puts eleve1.moyenne?
-
-puts eleve1 > eleve2
+d = Delegue.new('Marc', 18)
+d.ajouterNote(18)
+d.ajouterNote(14)
+d.ajouterNote(15)
+puts d.notes.inspect
+# puts d.class.superclass
 
 
 class String
