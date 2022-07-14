@@ -4,16 +4,35 @@ module Notable
 
   attr_accessor :notes
 
+  class Error < RuntimeError
+  end
+
+  class MoyenneError < Error
+    def initialize
+      super("Impossible de calculer la moyenne sans notes")
+    end
+  end
+
+  class AjouterNoteError < Error
+    def initialize
+      super("La note doit être un entier")
+    end
+  end
+
   def notes
     @notes = [] if !@notes
     return @notes
   end
 
   def ajouterNote(note)
+    raise AjouterNoteError if !note.respond_to? :to_i
+
     notes << note
   end
 
   def moyenne
+    raise MoyenneError if notes.length == 0
+
     m = 0
     notes.each { |note| m += note }
     return m / notes.length
@@ -77,5 +96,12 @@ eleve.ajouterNote(14)
 puts eleve.moyenne
 
 prof = Professeur.new
-prof.notes = [15, 19]
-puts prof.moyenne
+
+begin
+  prof.ajouterNote([1, 2])
+  puts prof.moyenne
+
+rescue Notable::Error => err
+  puts err.to_s
+
+end
